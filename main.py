@@ -1,40 +1,52 @@
-import sqlite3
-from faker import Faker
-fake = Faker()
+from flask import Flask, url_for, render_template, redirect, session
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired
 
-Faker.seed(0)
+import os
+from flask_sqlalchemy import SQLAlchemy
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-# Connect to the database
-conn = sqlite3.connect('data.db')
-c = conn.cursor()
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'key'
 
-# Create tables
-#c.execute('''CREATE TABLE Authors (
-#                id INTEGER PRIMARY KEY,
-#                name TEXT
-#             )''')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir + 'data.sqlite')
+db = SQLAlchemy(app)
 
-#c.execute('''CREATE TABLE Books (
-#                id INTEGER PRIMARY KEY,
-#                title TEXT,
-#                author_id INTEGER,
-#                FOREIGN KEY(author_id) REFERENCES Authors(id)
-#             )''')
+class RegistrationForm(FlaskForm):
+    username = StringField("Username: ", validators=[DataRequired()])
+    email = StringField("Email: ", )
+    password = PasswordField("Password: ",)
+    submit = SubmitField("Submit")
 
-# Insert FAKE data
-#for i in range (101):
-#    name = fake.name()
-#    title = fake.bs()
-#    c.execute(f"INSERT INTO Authors (name) VALUES ('{name}')")
-#    c.execute(f"INSERT INTO Books (title, author_id) VALUES ('{title}', {i})")
+class User(db.Model):
+    __tablename__ = 'Users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True)
+    email = db.Column(db.String(64), unique=True)
+    password = db.Column(db.String(64))
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    username = None
+    form = RegistrationForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        form.username.data = ''
+
+    #if name is in:
+    #    return redirect(f'/user/{name}')
+
+    return render_template('register.html', form=form, username=username)
 
 
-# Insert data
-#c.execute("INSERT INTO Authors (name) VALUES ('George Orwell')")
-#c.execute("INSERT INTO Books (title, author_id) VALUES ('1984', 1)")
-#c.execute("INSERT INTO Books (title, author_id) VALUES ('Animal Farm', 1)")
-
-
-
-conn.commit()
-conn.close()
+if __name__ == '__main__':
+    app.run(debug=True)

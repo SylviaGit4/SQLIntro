@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>{% block title %} {% endblock %} - Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/style.css') }}">
+    {% endblock %}
+</head>
+<body>
+    <h1>Present on all pages extending from base.</h1>
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
