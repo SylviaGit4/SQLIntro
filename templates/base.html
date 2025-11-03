@@ -7,7 +7,12 @@
     {% endblock %}
 </head>
 <body>
-    <h1>Present on all pages extending from base.</h1>
+    <div class = header>
+        <h1>Present on all pages extending from base.</h1>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </div>
     {% block body %}
     {% endblock %}
 </body>
