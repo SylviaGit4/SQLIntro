@@ -37,7 +37,7 @@ class LoginForm(FlaskForm):
 class Users(db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True)
+    username = db.Column(db.String(64))
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.String(64))
 
@@ -51,26 +51,35 @@ def index():
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    
-    if form.validate_on_submit():
+    registerError = None
+
+    existing_user = Users.query.filter_by(email=form.email.data).first()
+    if form.validate_on_submit() and not existing_user:
         user = Users(username=form.username.data, email=form.email.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
+        return redirect(url_for('login'))
+    
+    elif form.validate_on_submit():
+        registerError = "Email already registered."
 
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, registerError=registerError)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    form = RegistrationForm()
+    form = LoginForm()
+    loginError = None
     
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first 
-        if user is not None and user.password == form.password.data:
-            print("Login successful")
+    if form.validate_on_submit():   
+        user = Users.query.filter_by(email=form.email.data).first() 
+        password = form.password.data
+        
+        if user and user.password == password:
+            return redirect(url_for('index'))
         else:
-            print("Invalid credentials")
+            loginError = "Invalid email or password."
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, loginError=loginError)
 
 
 if __name__ == '__main__':

@@ -18,5 +18,8 @@
             {{ form.password.label}} {{ form.password() }}
             {{ form.submit() }}
         </form>
+        {% if registerError %}
+            <div class="error">{{ registerError }}</div>
+        {% endif %}
      </div>
 {% endblock %}

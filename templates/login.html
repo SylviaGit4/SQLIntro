@@ -17,5 +17,8 @@
             {{ form.password.label}} {{ form.password() }}
             {{ form.submit() }}
         </form>
+        {% if loginError %}
+            <div class="error">{{ loginError }}</div>
+        {% endif %}
      </div>
 {% endblock %}
