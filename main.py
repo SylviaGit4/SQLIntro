@@ -1,8 +1,8 @@
-from flask import Flask, url_for, render_template, redirect, session
+from flask import Flask, url_for, render_template, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, login_user
 
 #from flask_bootstrap import Bootstrap5
 
@@ -13,16 +13,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 #bootstrap = Bootstrap5(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.get(user_id)
-
-
 
 app.config['SECRET_KEY'] = 'key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
@@ -54,6 +44,22 @@ class Users(db.Model):
     username = db.Column(db.String(64))
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.String(64))
+
+    # Flask-Login required properties/methods
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
 with app.app_context():
     db.create_all()
@@ -89,8 +95,9 @@ def login():
         password = form.password.data
         
         if user and user.password == password:
-            load_user(Users.id)
-            return redirect(url_for('protected'))
+            load_user(user.id)
+            login_user(user)
+            return redirect(url_for('protected'))      
         else:
             loginError = "Invalid email or password."
 
@@ -100,7 +107,6 @@ def login():
 @login_required
 def protected():
     return render_template('protected.html')
-
 
 
 if __name__ == '__main__':
