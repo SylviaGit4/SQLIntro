@@ -4,16 +4,26 @@
     {% block head %}
     <title>{% block title %} {% endblock %} - Application</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/style.css') }}">
+    {{ bootstrap.load_css() }}
     {% endblock %}
 </head>
 <body>
-    <div class = header>
-        <h1>Present on all pages extending from base.</h1>
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('register') }}">Register</a>
-        <a href="{{ url_for('login') }}">Login</a>
-    </div>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid d-flex justify-content-center">
+            <span class="navbar-brand mb-0 h1">
+                <h2 class="navbar-brand d-flex justify-content-center">WebDev Practice</h2>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('index') }}">Home</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('register') }}">Register</a>
+                <a class="btn btn-secondary btn-sm" href="{{ url_for('login') }}">Login</a>
+            </span>
+        </div>
+    </nav>
+
     {% block body %}
+    {% endblock %}
+
+    {% block scripts %}
+    {{ bootstrap.load_js() }}
     {% endblock %}
 </body>
 </html>

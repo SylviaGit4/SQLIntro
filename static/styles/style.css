@@ -4,17 +4,9 @@
     gap: 5px;
 }
 
-.form-container{
-    border: 2px;
-    border-color: blueviolet;
-    border-style: solid;
-    width: 300px;
-    padding: 10px;
-    margin: auto;
-}
-
 .error{
     color: red;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: px;
+    margin: auto;
 }

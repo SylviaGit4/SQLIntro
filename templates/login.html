@@ -10,15 +10,19 @@
 
 {% block body %}
 
-    <div class = "form-container">
-        <form method = "POST", class="form">
-            {{ form.hidden_tag() }}
-            {{ form.email.label}} {{ form.email() }}
-            {{ form.password.label}} {{ form.password() }}
-            {{ form.submit() }}
-        </form>
-        {% if loginError %}
-            <div class="error">{{ loginError }}</div>
-        {% endif %}
-     </div>
+    <div class = "card" style ="width: 18rem; margin: auto; margin-top: 20px; padding: 5px;">
+        <div class="card-body">
+            <form method = "POST", class="form">
+                <h5 class="card-title">Login to Existing Account</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Input your login details below.</h6>
+                {{ form.hidden_tag() }}
+                {{ form.email.label}} {{ form.email() }}
+                {{ form.password.label}} {{ form.password() }}
+                {% if loginError %}
+                    <div class="error">{{ loginError }}</div>
+                {% endif %}
+                {{ form.submit(class_="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
 {% endblock %}
