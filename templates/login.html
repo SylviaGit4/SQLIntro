@@ -16,8 +16,8 @@
                 <h5 class="card-title">Login to Existing Account</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Input your login details below.</h6>
                 {{ form.hidden_tag() }}
-                {{ form.email.label}} {{ form.email() }}
-                {{ form.password.label}} {{ form.password() }}
+                {{ form.email(placeholder="Email") }}
+                {{ form.password(placeholder="Password") }}
                 {% if loginError %}
                     <div class="error">{{ loginError }}</div>
                 {% endif %}

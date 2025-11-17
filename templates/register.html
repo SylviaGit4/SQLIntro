@@ -16,9 +16,9 @@
                 <h5 class="card-title">Register Account</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Input your username, email & password below to register.</h6>
                 {{ form.hidden_tag() }}
-                {{ form.username.label}} {{ form.username() }}
-                {{ form.email.label}} {{ form.email() }}
-                {{ form.password.label}} {{ form.password() }}
+                {{ form.username(placeholder="Username") }}
+                {{ form.email(placeholder="Email") }}
+                {{ form.password(placeholder="Password") }}
                 {% if registerError %}
                     <div class="error">{{ registerError }}</div>
                 {% endif %}

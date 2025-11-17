@@ -28,14 +28,14 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 class RegistrationForm(FlaskForm):
-    username = StringField("Username: ", validators=[DataRequired()])
-    email = StringField("Email: ", validators=[DataRequired()])
-    password = PasswordField("Password: ", validators=[DataRequired()])
+    username = StringField(validators=[DataRequired()])
+    email = StringField(validators=[DataRequired()])
+    password = PasswordField(validators=[DataRequired()])
     submit = SubmitField("Register")
 
 class LoginForm(FlaskForm):
-    email = StringField("Email: ", validators=[DataRequired()])
-    password = PasswordField("Password: ", validators=[DataRequired()])
+    email = StringField(validators=[DataRequired()])
+    password = PasswordField(validators=[DataRequired()])
     submit = SubmitField("Login")
 
 class Users(db.Model):
